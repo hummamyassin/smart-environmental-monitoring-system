@@ -1,0 +1,133 @@
+{
+  "recovery_date": "2026-11-18",
+  "zip_sha256": "c959258e3f3f5e38a2fb03c06083c6f67359b97f0974c2eaf610b62edb0fb83a",
+  "original_git_head": "74e340a09294ea531a006625907ef52f94e46b2c",
+  "target_before_recovery": "e44bdaa8b4bb90f7de2cd634043eab1a088aaecf",
+  "sources": [
+    {
+      "source": "ZIP outer/.gitattributes",
+      "sha256": "d8fb0de4792538f93822b2c0d235604921299d5e54a3d6ec7a6cb34536e8bf1e",
+      "bytes": 68
+    },
+    {
+      "source": "ZIP outer/.gitignore",
+      "sha256": "d2f05f5f4b4f7ff1565e39ad7f63e5f24f84fde8eb7387b90a918e5b360edb58",
+      "bytes": 121
+    },
+    {
+      "source": "ZIP outer/README.md",
+      "sha256": "61dc16f4b46f036525da09b1ffb563a7983c9bde9b640abcaa5b54ee632471cb",
+      "bytes": 630
+    },
+    {
+      "source": "ZIP outer/docs/.gitkeep",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "bytes": 3
+    },
+    {
+      "source": "ZIP outer/hardware/.gitkeep",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "bytes": 3
+    },
+    {
+      "source": "ZIP outer/testing/.gitkeep",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "bytes": 3
+    },
+    {
+      "source": "ZIP outer/web-dashboard/.gitkeep",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "bytes": 3
+    },
+    {
+      "source": "ZIP outer/docs/capstone-reports/.gitkeep",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "bytes": 3
+    },
+    {
+      "source": "ZIP outer/docs/presentation/.gitkeep",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "bytes": 3
+    },
+    {
+      "source": "ZIP outer/hardware/arduino-code/.gitkeep",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "bytes": 3
+    },
+    {
+      "source": "ZIP outer/hardware/arduino-code/config.example.h",
+      "sha256": "4b0547b7e753c9281114cf9f7272f8a22c1e9df0c9cb8743b50ded377a6ba68b",
+      "bytes": 5059
+    },
+    {
+      "source": "ZIP outer/hardware/circuit-diagrams/.gitkeep",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "bytes": 3
+    },
+    {
+      "source": "ZIP outer/hardware/arduino-code/main/config.example.h",
+      "sha256": "4368335f2c3ec3c632f28e97b74db1490dcee42554e3ea9fb107773ec97957c6",
+      "bytes": 3380
+    },
+    {
+      "source": "ZIP outer/hardware/arduino-code/main/main.ino",
+      "sha256": "9200ea277b404bc3976b22a7b5f2d8c74574c99066a27ffb79dd3bd9e8da0a8b",
+      "bytes": 15105
+    },
+    {
+      "source": "ZIP outer/testing/sensor-tests/.gitkeep",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "bytes": 3
+    },
+    {
+      "source": "ZIP outer/testing/sensor-tests/test-results.md",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "ZIP outer/web-dashboard/firebase/.gitkeep",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "bytes": 3
+    },
+    {
+      "source": "ZIP outer/web-dashboard/firebase/firebase-config-example.js",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "ZIP outer/web-dashboard/frontend/.gitkeep",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "bytes": 3
+    },
+    {
+      "source": "ZIP outer/web-dashboard/frontend/index.html",
+      "sha256": "5429b32c62f5043be223ed9e47929a3165008b7ede4f67abf15e789f6ecc9e83",
+      "bytes": 16343
+    },
+    {
+      "source": "ZIP outer/web-dashboard/frontend/script.js",
+      "sha256": "ee1e2f4df65739dd12fff7e85c166649f2a3bc1a7cf34e6cebf19193f1db6f6c",
+      "bytes": 25352
+    },
+    {
+      "source": "ZIP outer/web-dashboard/frontend/style.css",
+      "sha256": "83f5ff584a19a483717c1e54069ba13596b98b7a88c3c7b9177c3d2d60cfe639",
+      "bytes": 23856
+    },
+    {
+      "source": "https://semsp.netlify.app/index.html",
+      "sha256": "338785f258ef75c4b17f4b90ad71def2c43099e4276cc89071c7c352782af4a6",
+      "bytes": 14801
+    },
+    {
+      "source": "https://semsp.netlify.app/script.js",
+      "sha256": "808458f8556145d4701b392054d43bb6cfb5ebf5c39e56d97c8ec8bfd3d68bc6",
+      "bytes": 30689
+    },
+    {
+      "source": "https://semsp.netlify.app/style.css",
+      "sha256": "83f5ff584a19a483717c1e54069ba13596b98b7a88c3c7b9177c3d2d60cfe639",
+      "bytes": 23856
+    }
+  ]
+}

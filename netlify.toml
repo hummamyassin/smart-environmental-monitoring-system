@@ -1,0 +1,7 @@
+# Serves only the dashboard, not firmware or report files.
+[build]
+  publish = "web-dashboard"
+[[redirects]]
+  from = "/"
+  to = "/frontend/"
+  status = 302

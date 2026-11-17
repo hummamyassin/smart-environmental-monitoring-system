@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEMS — Smart Environmental Monitoring System</title>
+
+  <!-- Google Fonts: Rajdhani (display) + JetBrains Mono (data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="header">
+    <div class="header-left">
+      <div class="logo-mark" aria-hidden="true">
+        <span class="logo-ring"></span>
+        <span class="logo-dot"></span>
+      </div>
+      <div class="header-title">
+        <span class="header-acronym">SEMS</span>
+        <span class="header-full">Smart Environmental Monitoring System</span>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="system-clock" id="systemClock">--:--:--</div>
+      <div class="system-date" id="systemDate">--- -- ----</div>
+    </div>
+
+    <div class="header-right">
+      <div class="conn-badge" id="connBadge">
+        <i class="ph ph-wifi-high"></i>
+        <span id="connLabel">CONNECTING</span>
+      </div>
+      <div class="uptime-wrap">
+        <span class="uptime-label">UPTIME</span>
+        <span class="uptime-value" id="uptimeVal">00:00:00</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="alert-banner" id="alertBanner" role="alert" aria-live="assertive">
+    <i class="ph ph-warning-octagon alert-icon"></i>
+    <div class="alert-messages" id="alertMessages"></div>
+    <button class="alert-dismiss" id="alertDismiss" aria-label="Dismiss alerts">
+      <i class="ph ph-x"></i>
+    </button>
+  </div>
+
+  <main class="main">
+
+    <section class="system-status-bar" id="systemStatusBar">
+      <div class="status-bar-inner">
+        <div class="status-orb-wrap">
+          <div class="status-orb" id="systemOrb"></div>
+        </div>
+        <div class="status-bar-text">
+          <span class="status-bar-label">SYSTEM STATUS</span>
+          <span class="status-bar-value" id="systemStatusText">NOMINAL</span>
+        </div>
+        <div class="status-bar-divider" aria-hidden="true"></div>
+        <div class="status-meta">
+          <span class="meta-item"><i class="ph ph-clock"></i> Last update: <strong id="lastUpdate">--:--:--</strong></span>
+          <span class="meta-item"><i class="ph ph-git-commit"></i> Cycle: <strong id="cycleCount">0</strong></span>
+          <span class="meta-item"><i class="ph ph-broadcast"></i> Source: <strong id="sourceLabel">Waiting for data</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="sensor-grid" aria-label="Sensor readings">
+
+      <article class="sensor-card" id="card-temp" data-sensor="temp">
+        <div class="card-header">
+          <div class="card-icon-wrap">
+            <i class="ph ph-thermometer-hot card-icon"></i>
+          </div>
+          <div class="card-meta">
+            <h2 class="card-title">Temperature</h2>
+            <span class="card-subtitle">DHT11 · D4</span>
+          </div>
+          <div class="card-badge" id="badge-temp">SAFE</div>
+        </div>
+        <div class="card-body">
+          <div class="big-value-wrap">
+            <span class="big-value" id="val-temp">--.-</span>
+            <span class="big-unit">°C</span>
+          </div>
+          <div class="threshold-bar-wrap" aria-hidden="true">
+            <div class="threshold-bar">
+              <div class="threshold-fill" id="fill-temp"></div>
+              <div class="threshold-marker warn" style="left:33.3%"></div>
+              <div class="threshold-marker danger" style="left:37.3%"></div>
+            </div>
+            <div class="threshold-labels">
+              <span>0°C</span><span>WARN 25°</span><span>DANGER 28°</span><span>75°C</span>
+            </div>
+          </div>
+          <canvas class="mini-chart" id="chart-temp" height="52" aria-label="Temperature trend"></canvas>
+        </div>
+        <div class="card-footer">
+          <span class="card-range">Range: 0 – 75 °C</span>
+          <span class="card-updated" id="upd-temp">--</span>
+        </div>
+      </article>
+
+      <article class="sensor-card" id="card-hum" data-sensor="hum">
+        <div class="card-header">
+          <div class="card-icon-wrap">
+            <i class="ph ph-drop-half card-icon"></i>
+          </div>
+          <div class="card-meta">
+            <h2 class="card-title">Humidity</h2>
+            <span class="card-subtitle">DHT11 · D4</span>
+          </div>
+          <div class="card-badge" id="badge-hum">SAFE</div>
+        </div>
+        <div class="card-body">
+          <div class="big-value-wrap">
+            <span class="big-value" id="val-hum">--</span>
+            <span class="big-unit">%</span>
+          </div>
+          <div class="threshold-bar-wrap" aria-hidden="true">
+            <div class="threshold-bar">
+              <div class="threshold-fill" id="fill-hum"></div>
+              <div class="threshold-marker warn" style="left:50%"></div>
+              <div class="threshold-marker warn" style="left:65%"></div>
+            </div>
+            <div class="threshold-labels">
+              <span>0%</span><span>LOW 20%</span><span>HIGH 85%</span><span>100%</span>
+            </div>
+          </div>
+          <canvas class="mini-chart" id="chart-hum" height="52" aria-label="Humidity trend"></canvas>
+        </div>
+        <div class="card-footer">
+          <span class="card-range">Safe: 20 – 85 %</span>
+          <span class="card-updated" id="upd-hum">--</span>
+        </div>
+      </article>
+
+      <article class="sensor-card" id="card-air" data-sensor="air">
+        <div class="card-header">
+          <div class="card-icon-wrap">
+            <i class="ph ph-wind card-icon"></i>
+          </div>
+          <div class="card-meta">
+            <h2 class="card-title">Air Quality</h2>
+            <span class="card-subtitle">MQ-135 · D2</span>
+          </div>
+          <div class="card-badge" id="badge-air">SAFE</div>
+        </div>
+        <div class="card-body">
+          <div class="big-value-wrap">
+            <span class="big-value" id="val-air">---</span>
+            <span class="big-unit">raw</span>
+          </div>
+          <div class="threshold-bar-wrap" aria-hidden="true">
+            <div class="threshold-bar">
+              <div class="threshold-fill" id="fill-air"></div>
+              <div class="threshold-marker warn" style="left:24.4%"></div>
+              <div class="threshold-marker danger" style="left:29.3%"></div>
+            </div>
+            <div class="threshold-labels">
+              <span>0</span><span>WARN 1000</span><span>DANGER 1200</span><span>4095</span>
+            </div>
+          </div>
+          <canvas class="mini-chart" id="chart-air" height="52" aria-label="Air quality trend"></canvas>
+        </div>
+        <div class="card-footer">
+          <span class="card-range">ADC 0 – 4095</span>
+          <span class="card-updated" id="upd-air">--</span>
+        </div>
+      </article>
+
+      <article class="sensor-card" id="card-dust" data-sensor="dust">
+        <div class="card-header">
+          <div class="card-icon-wrap">
+            <i class="ph ph-circle-dashed card-icon"></i>
+          </div>
+          <div class="card-meta">
+            <h2 class="card-title">Dust Level</h2>
+            <span class="card-subtitle">GP2Y1014AU0F · A0</span>
+          </div>
+          <div class="card-badge" id="badge-dust">SAFE</div>
+        </div>
+        <div class="card-body">
+          <div class="big-value-wrap">
+            <span class="big-value" id="val-dust">-.----</span>
+            <span class="big-unit">mg/m³</span>
+          </div>
+          <div class="threshold-bar-wrap" aria-hidden="true">
+            <div class="threshold-bar">
+              <div class="threshold-fill" id="fill-dust"></div>
+              <div class="threshold-marker warn" style="left:40%"></div>
+              <div class="threshold-marker danger" style="left:50%"></div>
+            </div>
+            <div class="threshold-labels">
+              <span>0</span><span>WARN 0.40</span><span>DANGER 0.50</span><span>1.00</span>
+            </div>
+          </div>
+          <canvas class="mini-chart" id="chart-dust" height="52" aria-label="Dust level trend"></canvas>
+        </div>
+        <div class="card-footer">
+          <span class="card-range">Uncalibrated dust estimate</span>
+          <span class="card-updated" id="upd-dust">--</span>
+        </div>
+      </article>
+
+      <article class="sensor-card sound-card" id="card-sound" data-sensor="sound">
+        <div class="card-header">
+          <div class="card-icon-wrap">
+            <i class="ph ph-speaker-high card-icon"></i>
+          </div>
+          <div class="card-meta">
+            <h2 class="card-title">Sound Detection</h2>
+            <span class="card-subtitle">KY-038 · D1</span>
+          </div>
+          <div class="card-badge" id="badge-sound">QUIET</div>
+        </div>
+        <div class="card-body sound-body">
+          <div class="sound-indicator" id="soundIndicator" aria-label="Sound status">
+            <div class="sound-ring r1"></div>
+            <div class="sound-ring r2"></div>
+            <div class="sound-ring r3"></div>
+            <i class="ph ph-microphone sound-icon" id="soundIcon"></i>
+          </div>
+          <div class="sound-status-text" id="soundStatus">No sound detected</div>
+          <div class="sound-event-log" id="soundLog">
+            <span class="log-label">Recent events:</span>
+            <ul id="soundEventList"></ul>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-range">Analog raw reading</span>
+          <span class="card-updated" id="upd-sound">--</span>
+        </div>
+      </article>
+
+      <article class="sensor-card fan-card" id="card-fan" data-sensor="fan">
+        <div class="card-header">
+          <div class="card-icon-wrap">
+            <i class="ph ph-fan card-icon" id="fanIconHeader"></i>
+          </div>
+          <div class="card-meta">
+            <h2 class="card-title">Fan / Turbine</h2>
+            <span class="card-subtitle">Relay · D3</span>
+          </div>
+          <div class="card-badge" id="badge-fan">OFF</div>
+        </div>
+        <div class="card-body fan-body">
+          <div class="fan-visual" id="fanVisual" aria-label="Fan animation">
+            <svg class="fan-svg" id="fanSvg" viewBox="0 0 100 100" aria-hidden="true">
+              <g id="fanBlades" class="fan-blades">
+                <ellipse cx="50" cy="28" rx="10" ry="22" fill="currentColor" opacity="0.85" transform="rotate(0 50 50)"/>
+                <ellipse cx="50" cy="28" rx="10" ry="22" fill="currentColor" opacity="0.85" transform="rotate(72 50 50)"/>
+                <ellipse cx="50" cy="28" rx="10" ry="22" fill="currentColor" opacity="0.85" transform="rotate(144 50 50)"/>
+                <ellipse cx="50" cy="28" rx="10" ry="22" fill="currentColor" opacity="0.85" transform="rotate(216 50 50)"/>
+                <ellipse cx="50" cy="28" rx="10" ry="22" fill="currentColor" opacity="0.85" transform="rotate(288 50 50)"/>
+              </g>
+              <circle cx="50" cy="50" r="8" fill="var(--bg-card)" stroke="currentColor" stroke-width="2"/>
+              <circle cx="50" cy="50" r="3" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="fan-status-text" id="fanStatusText">Standby</div>
+          <div class="fan-trigger-info" id="fanTriggerInfo">No active triggers</div>
+        </div>
+        <div class="card-footer">
+          <span class="card-range">Active LOW relay</span>
+          <span class="card-updated" id="upd-fan">--</span>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="bottom-row">
+
+      <div class="alert-log-panel">
+        <div class="panel-header">
+          <i class="ph ph-list-bullets"></i>
+          <span>Event Log</span>
+          <button class="clear-log-btn" id="clearLogBtn" aria-label="Clear log">
+            <i class="ph ph-trash"></i> Clear
+          </button>
+        </div>
+        <ul class="event-log-list" id="eventLogList">
+          <li class="log-entry log-info">
+            <span class="log-time">--:--:--</span>
+            <span class="log-msg">System initialising…</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="project-info-panel">
+        <div class="panel-header">
+          <i class="ph ph-info"></i>
+          <span>Project Info</span>
+        </div>
+        <div class="project-details">
+          <div class="detail-row">
+            <span class="detail-label">Project</span>
+            <span class="detail-val">Smart Environmental Monitoring System</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">University</span>
+            <span class="detail-val">Bahçeşehir University</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Course</span>
+            <span class="detail-val">Capstone 2 — 2025/26</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Hardware</span>
+            <span class="detail-val">XIAO ESP32-C6</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Sensors</span>
+            <span class="detail-val">MQ-135 · GP2Y · KY-038 · DHT11</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Data source</span>
+            <span class="detail-val data-source-val" id="dataSourceVal">⬤ Firebase Live</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>SEMS Dashboard · Bahçeşehir University Capstone 2 · 2025–26</span>
+    <span class="footer-divider" aria-hidden="true">·</span>
+    <span>CMP: Noor Aldeen · Hummam &nbsp;|&nbsp; EEE: Bilal · Melih · Mert</span>
+    <span class="footer-divider" aria-hidden="true">·</span>
+    <span id="footerMode">Mode: Connecting</span>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="../firebase/firebase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "temperature": 24.0,
+  "humidity": 55.0,
+  "airQuality": 700,
+  "dust": 0.02,
+  "dustRaw": 100,
+  "dustVoltage": 0.08,
+  "sound": 450,
+  "fan": false,
+  "dhtOk": true,
+  "mqWarmupDone": true,
+  "wifiRssi": -60,
+  "timestamp": 15000
+}

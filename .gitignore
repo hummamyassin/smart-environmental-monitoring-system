@@ -1,0 +1,24 @@
+# Private local configuration
+config.h
+.env
+.env.*
+!.env.example
+firebase-config.js
+firebase-config.json
+*service-account*.json
+*serviceAccount*.json
+credentials*.json
+*.pem
+*.key
+*.p12
+# Dependencies, build products and local tooling
+node_modules/
+.pio/
+build/
+coverage/
+test-results/
+playwright-report/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
