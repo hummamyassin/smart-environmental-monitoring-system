@@ -139,6 +139,14 @@ Calibrate sensors against reference instruments; validate the relay driver and p
 
 This was a collaborative university capstone developed by Computer Engineering and Electrical and Electronics Engineering students at **Bahçeşehir University, Faculty of Engineering and Natural Sciences**, for **Capstone II, 2026**. This repository is maintained by Hummam Wala Mohammad Yassin as a personal portfolio presentation of his documented work within that team project.
 
+### My Contributions
+
+Alongside dashboard development, Hummam worked directly on ESP32-C6 firmware: editing code, uploading it to the physical microcontroller, testing behavior, and debugging firmware during integration. His hands-on work also included Firebase/cloud integration and end-to-end IoT troubleshooting across the hardware, firmware, Wi-Fi, and database path. He diagnosed connectivity and integration issues and helped teammates resolve them. These contributions describe his work within the collaborative team; they do not imply that he built the complete system independently.
+
+### Technical Challenges & Solutions
+
+Hummam's troubleshooting work spanned the interfaces between sensor hardware, ESP32-C6 firmware, Wi-Fi connectivity, and Firebase. He iterated by changing and deploying firmware to the board, observing test results, tracing connectivity and data-flow failures across layers, and helping teammates isolate and resolve integration problems. The team responsibilities and partial relay/fan validation documented in the academic report remain as reported; this portfolio account adds Hummam's hands-on debugging and testing contribution without changing that report or attributing the team's other work to him.
+
 The final report's original names and contribution record remain unchanged in the [academic report](docs/capstone-reports/SEMS-Capstone-II-Final-Report.pdf). For this portfolio README, other students are anonymized as requested. Their departments and contribution boundaries follow Section 7.2, Table 7 of that report.
 
 | Team member | Department | Principal contributions |
