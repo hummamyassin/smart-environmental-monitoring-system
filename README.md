@@ -1,116 +1,105 @@
 # Smart Environmental Monitoring System (SEMS)
 
-**Personal portfolio presentation of a collaborative IoT environmental-monitoring capstone, built at Bahçeşehir University, Capstone II, June 2026.**
+**Hummam Wala Mohammad Yassin** — Computer Engineering Graduate, Bahçeşehir University  (Repository maintainer)
 
-**Repository owner and maintainer:** Hummam Wala Mohammad Yassin, Computer Engineering. This is a team capstone presented here as a personal portfolio project; Hummam did not independently develop the complete system.
+SEMS is an IoT prototype that monitors temperature, humidity, relative air quality, dust and ambient sound. A Seeed Studio XIAO ESP32-C6 reads the sensors, evaluates local ventilation thresholds and sends the latest reading over Wi-Fi to Firebase Realtime Database. A browser dashboard displays sensor values, status indicators, alerts and short trend charts.
 
-SEMS brings temperature, humidity, relative air quality, dust and ambient sound readings into a browser dashboard. A Seeed Studio XIAO ESP32-C6 samples the sensors, evaluates local ventilation thresholds and sends the latest reading over Wi-Fi to Firebase Realtime Database. The dashboard presents sensor cards, status indicators, alerts and short trend charts.
+> Developed as a collaborative Computer Engineering and Electrical/Electronics Engineering capstone project at Bahçeşehir University. This portfolio describes my engineering contributions within the team project; I did not develop the entire system independently.
 
-The project addresses a practical problem: classrooms, laboratories and other indoor spaces often lack an affordable way to observe changing conditions remotely. It combines embedded programming, cloud data handling and frontend development in one student-built prototype.
+## Project overview
 
-> **Recovery status:** This repository preserves the original 11-commit project history and this portfolio repository's existing history. Firmware was recovered from uncommitted files in the supplied ZIP; the live-capable frontend was recovered from the team's deployed Netlify site on 18 November 2026. Private settings are excluded. Hardware-to-cloud operation has not been revalidated during recovery. See [provenance and changes](docs/recovery.md).
+Classrooms, laboratories and other indoor spaces can benefit from accessible environmental monitoring. SEMS combines embedded firmware, cloud data flow and a web dashboard in a low-cost academic prototype. Its readings are intended to indicate relative changes, not to serve as certified measurements or safety alarms.
 
 ## System architecture
 
-![Original system architecture from the final report](docs/images/architecture-report.png)
+![SEMS sensor-to-cloud system architecture](docs/images/architecture-report.png)
 
-**Sensors → XIAO ESP32-C6 → Wi-Fi → Firebase `/sensors/latest` → web dashboard.**
+**Sensors → XIAO ESP32-C6 → Wi-Fi → Firebase `/sensors/latest` → web dashboard**
 
-The relay decision runs locally on the microcontroller. Firebase is a monitoring channel; the dashboard does not send fan-control commands. Local sensing can continue after Wi-Fi connection failure, although startup waits up to approximately 15 seconds for Wi-Fi and synchronous HTTP requests can delay sampling.
+Threshold and relay logic runs on the microcontroller. The cloud and dashboard provide monitoring; the dashboard does not control the fan. The device can continue local sampling when Wi-Fi is disconnected after startup, though blocking network requests can delay its loop.
 
-## Hardware
+## Technologies and hardware
 
-| Component | Purpose | Recovered final connection |
-|---|---|---|
-| Seeed Studio XIAO ESP32-C6 | Sensor acquisition, local decisions and Wi-Fi | Main board |
-| DHT11 | Temperature and relative humidity | D4 / GPIO22 |
-| MQ-135 | Relative air-quality indication, raw ADC | D2 / GPIO2 |
-| GP2Y1014AU0F | Uncalibrated optical dust estimate | A0 / GPIO0; LED control D5 / GPIO23 |
-| KY-038 | Ambient sound indication, raw analog value | D1 / GPIO1 |
-| Relay and fan | Prototype ventilation actuation | D3 / GPIO21 |
+**Software:** C/C++ with Arduino IDE, ESP32-C6 board support, WiFi/HTTPClient, Adafruit DHT library, Firebase Realtime Database, HTML, CSS, JavaScript, Chart.js, Netlify, Git and GitHub.
 
-This mapping agrees with Table 2 of the final report and the private configuration paired with the recovered firmware. Earlier commits contain different assignments and a single-pin dust implementation; use the current example, not those historical wiring comments. Confirm board labels, signal voltages, power and grounding before wiring.
+**Hardware:**
 
-## Software and cloud stack
+- Seeed Studio XIAO ESP32-C6 microcontroller
+- DHT11 temperature and humidity sensor
+- MQ-135 relative air-quality sensor
+- GP2Y1014AU0F optical dust sensor
+- KY-038 analog sound-level indication module
+- Relay module and fan for prototype ventilation actuation
 
-- C/C++, Arduino IDE, Espressif ESP32 board support, WiFi/HTTPClient and Adafruit DHT libraries.
-- Firebase Realtime Database: firmware REST uploads and browser real-time subscription.
-- HTML, CSS and JavaScript; Chart.js 4.4.0; Firebase compat SDK 10.12.2.
-- Netlify static hosting and Git/GitHub version control.
+The recovered final pin map is in the firmware configuration example and the academic report. MQ-135 and GP2Y readings are uncalibrated relative indicators; KY-038 values are raw readings, not decibels.
 
-The recovered versions are recorded for reproducibility; this is not a claim that dependencies are current or production-hardened.
+## Key features
 
-## Data flow and implemented features
+- Samples four sensors and applies local threshold logic.
+- Sends the current reading to Firebase at `/sensors/latest` using HTTP PUT.
+- Subscribes to the latest reading in the browser and updates sensor cards, status, alerts and fan state.
+- Shows short Chart.js trends using 20 in-memory readings per chart; initial chart points are defaults.
+- Uses clearly labelled simulated fallback data when Firebase configuration or connection is unavailable.
 
-| Capability | What the recovered code does |
-|---|---|
-| Sensor sampling | Reads four sensors; DHT validity and MQ warmup are included in the payload |
-| Latest upload | HTTP `PUT` to `/sensors/latest.json`, nominally every 5 seconds |
-| Live dashboard | Subscribes to `sensors/latest` and maps the firmware's current field names |
-| Status and alerts | Per-sensor thresholds, overall status, alert banner and event log |
-| Fan display | Displays the uploaded software state; it does not confirm physical movement |
-| Trend charts | Four rolling buffers of 20 readings in browser memory, initially seeded with defaults |
-| Fallback demo | Simulated readings when configuration is absent or initialization/read fails; explicitly labelled **FALLBACK DATA** |
-| Persistent history | `/sensors/history` is an intended extension; no upload or history query is implemented |
+Persistent `/sensors/history` uploads and historical chart queries are not implemented. Payload fields and timing details are described in the [technical audit](docs/technical-audit.md).
 
-The firmware's `timestamp` is `millis()` (uptime in milliseconds), not Unix time. The dashboard shows local receipt time. See the [payload example](firebase/latest.example.json) and [technical audit](docs/technical-audit.md).
+## My Contributions
+
+I worked directly on ESP32-C6 firmware as well as the web dashboard. My contributions included:
+
+- Editing and debugging firmware, uploading it to the physical microcontroller and testing its behavior.
+- Diagnosing sensor integration and hardware/software communication problems.
+- Troubleshooting ESP32 Wi-Fi connectivity and Firebase Realtime Database integration.
+- Debugging the sensor-to-cloud-to-dashboard pipeline and helping teammates resolve integration issues across hardware, firmware, Wi-Fi and Firebase.
+- Developing the HTML, CSS and JavaScript dashboard, including live Firebase data binding, Chart.js visualizations, status and alert indicators, and QR-code access.
+
+These are my hands-on engineering contributions within a collaborative project; the system also includes work by the rest of the capstone team.
+
+## Technical Challenges & Solutions
+
+- **Sensor and firmware integration:** Sensor readings had to be brought together with ESP32-C6 firmware and pin assignments. I edited and deployed firmware to the physical board, tested behavior, debugged integration issues and helped teammates trace problems between sensor hardware and software. The final pin map is documented in the report and configuration example.
+- **Wi-Fi and cloud data flow:** Connectivity problems can interrupt the path from the device to Firebase. I troubleshot Wi-Fi and Firebase integration and helped follow readings through the sensor-to-cloud-to-dashboard pipeline. The recovered firmware writes only the latest record; it has no offline queue or explicit reconnection/backoff, and authenticated cloud access remains future work.
+- **Live dashboard synchronization:** The browser must map Firebase fields to the displayed readings and indicate whether it is live or using fallback data. The recovered dashboard subscribes to `/sensors/latest`, with a simulated fallback when the connection fails. It has no stale-reading timeout, and its temperature and dust thresholds differ from firmware thresholds.
+- **Relay and fan compatibility:** The capstone report records inconsistent physical relay/fan actuation due to wiring sensitivity and the ESP32-C6's 3.3 V logic compatibility. The firmware generates relay state in software, but physical actuation was only partially validated. A suitable driver or level-shifting stage was identified as future improvement; this README does not claim the hardware issue was fully resolved.
+
+My role included hands-on debugging and helping the team resolve technical problems. This does not mean every issue was resolved: cloud access, data freshness, calibration and physical actuation retain the limitations described above and in the [technical audit](docs/technical-audit.md).
 
 ## Dashboard screenshots
 
-The dashboard code supports a simulated fallback when Firebase is not configured. Browser screenshot capture was unavailable in this recovery environment.
+![Dashboard shown in the final capstone report](docs/images/dashboard-report.jpg)
 
-![Live dashboard as documented in the university report](docs/images/dashboard-report.jpg)
+This image is historical evidence from the report. It does not confirm that a device is currently transmitting. Browser screenshot capture was unavailable during recovery.
 
-Historical evidence: Figure 3 from the final report shows the team's Firebase Live deployment. It is not evidence that a device is currently transmitting.
+## Installation and configuration
 
-## Repository structure
+### Run the dashboard fallback
 
-```text
-firmware/main/               ESP32-C6 sketch and safe configuration example
-web-dashboard/frontend/     Recovered HTML, CSS and JavaScript
-web-dashboard/firebase/     Browser configuration example
-firebase/                   Example payload and deny-by-default rules
-docs/capstone-reports/       Authoritative university report
-docs/images/                Report figures and recovery screenshot
-docs/                       Recovery, security, technical and validation notes
-tests/                      Recovery-time automated checks
-netlify.toml                Static hosting configuration
-```
-
-## Run and configure
-
-### Dashboard demonstration
-
-From the repository root, run:
+From the repository root:
 
 ```sh
 python -m http.server 8000 --directory web-dashboard
 ```
 
-Open `http://localhost:8000/frontend/`. Without local Firebase settings, the dashboard uses labelled simulated fallback data. External CDNs supply Chart.js, Firebase, icons and fonts; internet access is needed for those assets. A missing `firebase-config.js` request is expected until you configure it.
+Open `http://localhost:8000/frontend/`. Without local Firebase settings, simulated readings are shown and labelled as fallback data. The dashboard loads Chart.js, Firebase, icons and fonts from external CDNs, so those assets need internet access.
 
-### Firebase configuration
+### Configure Firebase
 
-1. Create or select your own Firebase Realtime Database project.
-2. Copy `web-dashboard/firebase/firebase-config-example.js` to `firebase-config.js` in the same directory and enter your browser app settings. This local file is ignored by Git. Browser app identifiers are visible to site visitors; never put privileged keys there.
-3. Review [security and access limitations](docs/security.md) before connecting a device. `firebase/database.rules.example.json` denies all access intentionally. It is a safe baseline, **not** a working access policy for the recovered clients.
-4. Implement an authenticated device write path and an appropriate dashboard read policy before cloud deployment. The recovered firmware makes unauthenticated REST requests and the frontend has no sign-in flow. Do not enable unrestricted writes to make the prototype work.
+1. Create a Firebase Realtime Database project.
+2. Copy `web-dashboard/firebase/firebase-config-example.js` to `web-dashboard/firebase/firebase-config.js` and enter your browser app settings. The local file is ignored by Git. Browser app identifiers are public; do not put privileged credentials in frontend files.
+3. Review [security guidance](docs/security.md). The included rules example denies all access and is not a working policy for the recovered clients.
+4. Implement an authenticated device write path and an appropriate dashboard read policy before deployment. The recovered firmware sends unauthenticated REST requests, and the dashboard has no sign-in flow.
 
-### Firmware
+### Build and upload firmware
 
-1. Install Arduino IDE, Espressif ESP32 board support including `XIAO_ESP32C6`, **DHT sensor library** by Adafruit and its **Adafruit Unified Sensor** dependency. Original toolchain versions were not recorded.
-2. Copy `firmware/main/config.example.h` to `firmware/main/config.h`. Supply your Wi-Fi settings and database URL, without a trailing slash. Keep this file private.
-3. Check wiring against the table above and review the prototype thresholds. The dashboard and firmware have different recovered temperature and dust thresholds; reconcile them before relying on consistent alerts.
-4. Open `firmware/main/main.ino`, select the board and serial port, compile and upload. Use the Serial Monitor at 115200 baud.
-5. Validate sensors locally, then verify authenticated cloud access and actual HTTP success. The original serial message says “Data sent” for any positive HTTP status, including rejected requests.
-
-### Static hosting
-
-The supplied Netlify configuration publishes `web-dashboard/` and redirects `/` to `/frontend/`. Supply your local browser configuration through your deployment process. No Netlify deployment or Firebase rules change was performed during repository recovery.
+1. Install Arduino IDE, Espressif ESP32 support including `XIAO_ESP32C6`, Adafruit DHT sensor library and its Adafruit Unified Sensor dependency.
+2. Copy `firmware/main/config.example.h` to `firmware/main/config.h`; enter your Wi-Fi settings and database URL locally. Do not commit this file.
+3. Check the pin map, wiring, voltage levels and prototype thresholds before connecting hardware.
+4. Open `firmware/main/main.ino`, choose the board and serial port, then compile and upload. The serial monitor uses 115200 baud.
+5. Verify sensor behavior and actual HTTP response codes. The original firmware logs “Data sent” for any positive HTTP status, including rejected requests.
 
 ## Testing and validation
 
-Run the dependency-free logic tests and static audit from the repository root:
+Run the available local checks:
 
 ```sh
 node --check web-dashboard/frontend/script.js
@@ -118,47 +107,27 @@ node --test tests/dashboard.test.cjs
 python tests/static_checks.py
 ```
 
-See [validation results](docs/validation.md) for checks actually executed, unverified browser, hardware and cloud behavior. The report records T-01–T-04 as Pass and T-05 relay/fan actuation as Partial. Those are the team's original results, not recovery-time test results. The ZIP's test-results file was empty.
+The five automated dashboard tests simulate Firebase behavior; they are not live-service tests. See [validation results](docs/validation.md). The final report records T-01 through T-04 as passed and T-05 relay/fan actuation as partial. Those are the team's reported tests, not recovery-time hardware results. Hardware, firmware compilation, Wi-Fi and live Firebase behavior were not revalidated during repository recovery.
 
 ## Known limitations
 
-- MQ-135 and GP2Y readings are uncalibrated relative indicators. Dust conversion is approximate and is not a certified PM2.5 measurement; KY-038 values are not decibels.
-- Physical relay/fan actuation was only partially validated in the capstone due to wiring and 3.3 V logic compatibility.
-- Cloud monitoring requires network connectivity. The firmware has no explicit reconnection/backoff or offline queue; HTTP calls can block the sensor loop.
-- The recovered firmware and deployed dashboard use different temperature/dust alert thresholds. The firmware's dust danger threshold is above the maximum produced by its nominal ADC conversion.
-- The dashboard has no stale-reading timeout, robust payload validation, user authentication or persistent history. A “Firebase Live” label alone does not establish fresh hardware data.
-- Some original event-log behavior can repeat fan entries; sensor validity metadata is stored but does not suppress stale DHT values in the cards.
+- MQ-135 and GP2Y readings are uncalibrated relative indicators; the dust conversion is approximate. The system is not a certified measurement or safety device.
+- Physical relay/fan actuation was only partially validated because of wiring and 3.3 V logic compatibility.
+- Cloud monitoring depends on Wi-Fi. There is no offline queue or explicit reconnection/backoff, and blocking HTTP calls can delay sampling.
+- Firmware and dashboard use different temperature and dust thresholds. The firmware's configured dust danger threshold is above its nominal conversion range.
+- Dashboard data has no stale-reading timeout or strict payload validation. DHT failure metadata does not prevent stale values from appearing.
+- Persistent history, authentication, multi-user access and long-term field operation are not implemented.
 
-This is an academic prototype, not an industrial-grade, production-ready or certified safety instrument. Details and exact differences are in the [technical audit](docs/technical-audit.md).
+SEMS is an academic prototype, not an industrial-grade or production-ready system.
 
 ## Future improvements
 
-Calibrate sensors against reference instruments; validate the relay driver and power stage; reconcile thresholds and units; introduce authenticated writes, payload validation and stale-data handling; implement server timestamps, durable history, reconnection and offline buffering; then test long-duration operation, enclosure design and usability.
+Calibrate the gas and dust sensors against reference instruments; reconcile threshold values and units; validate a level-shifted relay driver; add authenticated cloud access, payload validation and stale-data handling; implement persistent timestamped history and offline buffering; and test long-duration operation in a protective enclosure.
 
-## Portfolio contribution and team
+## Project Maintainer
 
-This was a collaborative university capstone developed by Computer Engineering and Electrical and Electronics Engineering students at **Bahçeşehir University, Faculty of Engineering and Natural Sciences**, for **Capstone II, 2026**. This repository is maintained by Hummam Wala Mohammad Yassin as a personal portfolio presentation of his documented work within that team project.
+**Hummam Wala Mohammad Yassin** — Computer Engineering Graduate, Bahçeşehir University. Repository maintainer and contributor to firmware debugging and deployment, Wi-Fi/Firebase integration, end-to-end troubleshooting and dashboard development.
 
-### My Contributions
+## Academic acknowledgment
 
-Alongside dashboard development, Hummam worked directly on ESP32-C6 firmware: editing code, uploading it to the physical microcontroller, testing behavior, and debugging firmware during integration. His hands-on work also included Firebase/cloud integration and end-to-end IoT troubleshooting across the hardware, firmware, Wi-Fi, and database path. He diagnosed connectivity and integration issues and helped teammates resolve them. These contributions describe his work within the collaborative team; they do not imply that he built the complete system independently.
-
-### Technical Challenges & Solutions
-
-Hummam's troubleshooting work spanned the interfaces between sensor hardware, ESP32-C6 firmware, Wi-Fi connectivity, and Firebase. He iterated by changing and deploying firmware to the board, observing test results, tracing connectivity and data-flow failures across layers, and helping teammates isolate and resolve integration problems. The team responsibilities and partial relay/fan validation documented in the academic report remain as reported; this portfolio account adds Hummam's hands-on debugging and testing contribution without changing that report or attributing the team's other work to him.
-
-The final report's original names and contribution record remain unchanged in the [academic report](docs/capstone-reports/SEMS-Capstone-II-Final-Report.pdf). For this portfolio README, other students are anonymized as requested. Their departments and contribution boundaries follow Section 7.2, Table 7 of that report.
-
-| Team member | Department | Principal contributions |
-|---|---|---|
-| **Hummam Wala Mohammad Yassin — Computer Engineering** | Computer Engineering | Web dashboard development (HTML/CSS/JavaScript), Firebase real-time data binding, Chart.js visualizations, dashboard status and alert logic, QR-code access |
-| **Member 1** | Computer Engineering | Firmware data handling and Firebase upload logic, Firebase schema, repository setup/version control, pin-mapping coordination and Netlify deployment |
-| **Member 2** | Electrical and Electronics Engineering | Sensor selection/sourcing, sensor-array breadboard wiring, power-distribution layout and bench verification of analog readings |
-| **Member 3** | Electrical and Electronics Engineering | GP2Y driver circuit, relay wiring/fan actuation stage, sensor handling and calibration preparation |
-| **Member 4** | Electrical and Electronics Engineering | KY-038 integration/threshold setup, relay supply/safety review, breadboard layout, labelling and assembly support |
-
-Hummam also presented the cloud/Firebase integration section during the final defense. This presentation role is separate from the implementation responsibilities credited above.
-
-Advisors: **Assist. Prof. Ece Gelal** (Computer Engineering) and **Prof. Dr. Şeref Kalem** (Electrical and Electronics Engineering).
-
-Original team source repository: [NoorZannad/smart-environment-monitoring-system](https://github.com/NoorZannad/smart-environment-monitoring-system). The report's poster identifies [semsp.netlify.app](https://semsp.netlify.app/) as the deployed dashboard; source assets were accessible during recovery. No new code license has been inferred or assigned to the team's work.
+Collaborative Capstone II project at Bahçeşehir University, developed across Computer Engineering and Electrical and Electronics Engineering. The original final report, including its full team credits, is preserved unchanged in [`docs/capstone-reports/`](docs/capstone-reports/).

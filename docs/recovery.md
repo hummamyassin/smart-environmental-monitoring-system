@@ -34,3 +34,11 @@ The recovered 11-commit history is merged as a second parent into the existing t
 - Report figures were extracted from the supplied PDF; the local fallback screenshot is newly captured and explicitly labelled. The PDF is preserved unchanged.
 
 The recovered code still has the limitations listed in [technical-audit.md](technical-audit.md). Recovery does not imply a completed production hardening or a new end-to-end hardware test.
+
+## Source provenance and acknowledgment
+
+The supplied project archive contained two copies of the original repository and a separate uncommitted firmware update. The deployed dashboard assets were recovered from the team's published Netlify site. Source selection, file hashes and the original repository location are recorded here so the portfolio README can stay focused on the project and its maintainer. The historical source repository was `https://github.com/NoorZannad/smart-environment-monitoring-system`.
+
+The final academic report is retained unchanged and contains the original team roster and individual contribution table. Its names and credits are authoritative academic records; the portfolio README intentionally does not repeat other students' names. The report also records the advisors and project context.
+
+No license has been added or inferred for recovered team code. Confirm the applicable ownership and permissions with the team before relicensing or redistributing code beyond this academic portfolio context. Existing source notices and attribution records remain in place.
